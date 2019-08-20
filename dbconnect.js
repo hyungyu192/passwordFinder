@@ -30,10 +30,11 @@ app.post('/login', async(req, res, next)=> {
         let result;
         try{
             result = await db.query("SELECT * FROM users1s WHERE identity = '" + identity +"' AND password = '" + password +"'");
-            db.end();
         }catch(err){
             return res.send(err);
+            db.destroy(); //서버에 쌓이는걸 방지
         }
+        db.destroy(); // 서버에 쌓이는걸 방지
         
         if (result.length === 1) {
             res.cookie('user-session' , result[0].identity);
